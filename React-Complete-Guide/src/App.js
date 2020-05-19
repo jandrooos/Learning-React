@@ -1,6 +1,21 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 import "./App.css";
 import Person from "./Person/Person";
+
+const StyledButton = styled.button`
+    background-color: ${(props) => (props.alt ? "red" : "green")};
+    color: white;
+    font: inherit;
+    border: 1px solid black;
+    padding: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${(props) => (props.alt ? "lightcoral" : "lightgreen")};
+      color: black;
+    },
+`;
 
 class App extends Component {
   state = {
@@ -43,11 +58,16 @@ class App extends Component {
 
   render() {
     const styling = {
-      backgroundColor: "white",
+      backgroundColor: "forestgreen",
+      color: "white",
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
       cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black",
+      },
     };
 
     let persons = null;
@@ -67,16 +87,32 @@ class App extends Component {
           })}
         </div>
       );
+      styling.backgroundColor = "red";
+      styling[":hover"] = {
+        backgroundColor: "lightcoral",
+        color: "black",
+      };
+    }
+
+    let classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push("red");
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push("bold");
     }
 
     //While it looks like HTML, it is not. It is instead JSX, made to look like HTML so you can write 'HTMLish' code.
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
-        <button style={styling} onClick={this.togglePersonsHandler}>
+        <p className={classes.join(" ")}>This is really working!</p>
+        <StyledButton
+          alt={this.state.showPersons}
+          onClick={this.togglePersonsHandler}
+        >
           Toggle Person
-        </button>
+        </StyledButton>
         {persons}
       </div>
     );
